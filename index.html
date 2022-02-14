@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html class = "">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="text/html; charset-utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="icon" href="public/favicon.ico" />
+    <title>Paper Bag Heads NFT</title>
+    <style>
+        * {margin:0; padding: 0; background-color: #000;}
+    </style>
+</head>
+
+<body>
+    <a href="https://www.paperbagheads.com" target="_blank">
+        <canvas id="screen"></canvas>
+    </a>
+    <script>
+        let speed = 50;
+        let scale = window.innerHeight * 0.02 / 100;
+        let canvas;
+        let ctx;
+        let logoColor;
+
+        let pbh = { x: 200, y: 200, xspeed: window.innerHeight * 0.02, yspeed: window.innerHeight * 0.02, img: new Image() };
+
+        function main(){
+            canvas = document.getElementById("screen");
+            ctx = canvas.getContext("2d");
+            pbh.img.src = 'public/logo.png';
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+            pickColor();
+            update();
+        };
+
+        function update() {
+            setTimeout(() => {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = logoColor;
+                ctx.fillRect(pbh.x, pbh.y, pbh.img.width*scale, pbh.img.height*scale);
+                ctx.drawImage(pbh.img, pbh.x, pbh.y, pbh.img.width*scale, pbh.img.height*scale);
+                pbh.x+=pbh.xspeed;
+                pbh.y+=pbh.yspeed;
+                checkHitBox();
+                update();   
+            }, speed)
+        }
+
+        function checkHitBox(){
+            if(pbh.x+pbh.img.width*scale >= canvas.width || pbh.x <= 0){
+                pbh.xspeed *= -1;
+                pickColor();
+            }
+                
+            if(pbh.y+pbh.img.height*scale >= canvas.height || pbh.y <= 0){
+                pbh.yspeed *= -1;
+                pickColor();
+            }    
+        }
+
+        function pickColor(){
+            r = Math.random() * (254 - 0) + 0;
+            g = Math.random() * (254 - 0) + 0;
+            b = Math.random() * (254 - 0) + 0;
+            logoColor = 'rgb('+r+','+g+', '+b+')';
+        }
+
+        main();
+        window.onresize = function(){ location.reload(); }
+    </script>
+</body>
+</html>
